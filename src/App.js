@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 
 import './App.css';
 import Home from './components/Home';
-import Department from './components/Department';
-import Employee from './components/Employee';
 import Nav from './components/Nav';
 import About from './components/About';
 import Shop from './components/Shop';
@@ -13,7 +11,7 @@ import Login from './components/Login';
 
 function App() {
 
-  const [isLogin, setLogin] = useState(false);
+  const [isLogged, setLogin] = useState(true);
 
 
   return (
@@ -22,24 +20,51 @@ function App() {
 
       <Router>
         {
-          isLogin ? null : <Nav />
+          !isLogged ? null : <Nav />
         }
 
         <Switch>
 
-          <Route path='/login' component={Login} />
-          <Route path='/' exact component={Home} />
-          <Route path='/department' component={Department} />
-          <Route path='/employee' component={Employee} />
-          <Route path='/about' component={About} />
-          <Route path='/shop' exact component={Shop} />
-          <Route path='/shop/:id' component={ItemDetail} />
+          <Route path='/login' render={() => (
+            isLogged ? (<Redirect to="/" />)
+              : (<Login />)
+          )} />
+
+          <Route path='/' exact render={() => (
+            isLogged ? (<Home />)
+              : (<Login />)
+          )} />
+
+          <Route path='/about' render={() => (
+            isLogged ? (<About />)
+              : (<Redirect to="/" />)
+          )} />
+
+          <Route path='/shop' exact render={() => (
+            isLogged ? (<Shop />)
+              : (<Redirect to="/" />)
+          )} />
+
+
+          <Route path='/shop/:id' render={({ match }) => (
+            isLogged ? (<ItemDetail match={match} />)
+              : (<Redirect to="/" />)
+          )} />
+
+
+          <Route path='*' render={() => (<Redirect to="/" />)} />
+
+
+          {/* <Route path='/' exact component={Home} onEnter={auth} />
+          <Route path='/department' component={Department} onEnter={auth} />
+          <Route path='/employee' component={Employee} onEnter={auth} />
+          <Route path='/about' component={About} onEnter={auth} />
+          <Route path='/shop' exact component={Shop} onEnter={auth} />
+          <Route path='/shop/:id' component={ItemDetail} onEnter={auth} /> */}
 
         </Switch>
 
       </Router>
-
-
 
 
     </div>
