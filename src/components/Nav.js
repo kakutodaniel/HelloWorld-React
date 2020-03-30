@@ -1,12 +1,16 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
-function Nav() {
+function Nav(props) {
 
     const navStyle = {
         color: 'white',
         // textDecoration: 'none'
+    }
+
+    function logout() {
+        props.handler()
     }
 
     return (
@@ -39,8 +43,11 @@ function Nav() {
                     <li style={navStyle}>Shop</li>
                 </Link>
 
+                <Link onClick={logout} to=''>
+                    <li style={navStyle}>Logout</li>
+                </Link>
 
-
+                {/* <li onClick={logout}>Logout</li> */}
 
             </ul>
 

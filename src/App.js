@@ -11,8 +11,15 @@ import Login from './components/Login';
 
 function App() {
 
-  const [isLogged, setLogin] = useState(true);
+  const [isLogged, setLogin] = useState(false);
 
+  function logged() {
+    setLogin(true);
+  }
+
+  function logout() {
+    setLogin(false);
+  }
 
   return (
 
@@ -20,19 +27,19 @@ function App() {
 
       <Router>
         {
-          !isLogged ? null : <Nav />
+          !isLogged ? null : <Nav handler={logout} />
         }
 
         <Switch>
 
           <Route path='/login' render={() => (
             isLogged ? (<Redirect to="/" />)
-              : (<Login />)
+              : (<Login handler={logged} />)
           )} />
 
           <Route path='/' exact render={() => (
             isLogged ? (<Home />)
-              : (<Login />)
+              : (<Login handler={logged} />)
           )} />
 
           <Route path='/about' render={() => (
