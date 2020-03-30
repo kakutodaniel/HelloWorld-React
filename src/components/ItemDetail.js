@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 
 
 function Item({ match }) {
@@ -6,7 +6,7 @@ function Item({ match }) {
     useEffect(() => {
         setTimeout(() => {
             fetchItem();
-        }, 3000);
+        }, 1000);
 
         // fetchItem();
         // console.log(match)
@@ -27,23 +27,43 @@ function Item({ match }) {
 
     };
 
-    if (loading) {
-        return (
-            <div>
-                <h1>Loading...</h1>
-            </div>
-        )
-    }
-    else {
-        return (
-            <div>
-                <h1>{item.strDrink}</h1>
-                <h2>{item.strCategory}</h2>
-                <img src={item.strDrinkThumb} alt="drink" />
+    return (
+        <Fragment>
+            {
+                loading ? (
+                    <div>
+                        <h1>Loading...</h1>
+                    </div>
+                ) :
+                    (
+                        <div>
+                            <h1>{item.strDrink}</h1>
+                            <h2>{item.strCategory}</h2>
+                            <img src={item.strDrinkThumb} alt="drink" />
+                        </div>
+                    )
+            }
 
-            </div>
-        )
-    }
+        </Fragment>
+    )
+
+    // if (loading) {
+    //     return (
+    //         <div>
+    //             <h1>Loading...</h1>
+    //         </div>
+    //     )
+    // }
+    // else {
+    //     return (
+    //         <div>
+    //             <h1>{item.strDrink}</h1>
+    //             <h2>{item.strCategory}</h2>
+    //             <img src={item.strDrinkThumb} alt="drink" />
+
+    //         </div>
+    //     )
+    // }
 
 }
 

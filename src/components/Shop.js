@@ -55,10 +55,7 @@ function Shop() {
 
         </div>
 
-
-
     )
-
 
 }
 
