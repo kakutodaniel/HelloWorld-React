@@ -4,11 +4,16 @@ import React, { useState, useEffect } from 'react'
 function Item({ match }) {
 
     useEffect(() => {
-        fetchItem();
+        setTimeout(() => {
+            fetchItem();
+        }, 3000);
+
+        // fetchItem();
         // console.log(match)
 
     }, []);
 
+    const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({});
 
     const fetchItem = async () => {
@@ -18,21 +23,27 @@ function Item({ match }) {
         console.log(item);
 
         setItem(item.drinks[0]);
+        setLoading(false);
 
     };
 
-    return (
-        <div>
-            <h1>{item.strDrink}</h1>
-            <h2>{item.strCategory}</h2>
-            <img src={item.strDrinkThumb} alt="drink" />
+    if (loading) {
+        return (
+            <div>
+                <h1>Loading...</h1>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <h1>{item.strDrink}</h1>
+                <h2>{item.strCategory}</h2>
+                <img src={item.strDrinkThumb} alt="drink" />
 
-        </div>
-
-
-
-    )
-
+            </div>
+        )
+    }
 
 }
 

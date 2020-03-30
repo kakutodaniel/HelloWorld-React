@@ -6,7 +6,7 @@ function Nav() {
 
     const navStyle = {
         color: 'white',
-        textDecoration: 'none'
+        // textDecoration: 'none'
     }
 
     return (
@@ -15,7 +15,7 @@ function Nav() {
             <h3>Logo</h3>
             <ul className="nav-links">
 
-                <li>
+                {/* <li>
                     <NavLink activeClassName={"active"} style={navStyle} to='/' exact>Home</NavLink>
                 </li>
 
@@ -25,20 +25,19 @@ function Nav() {
 
                 <li>
                     <NavLink activeClassName={"active"} style={navStyle} to='/shop'>Shop</NavLink>
-                </li>
+                </li> */}
 
-
-                {/* <Link to='/'>
-                    <li>Home</li>
+                <Link to='/'>
+                    <li style={navStyle}>Home</li>
                 </Link>
 
-                <Link to='/department'>
-                    <li>Department</li>
-                </Link> *
+                <Link to='/about'>
+                    <li style={navStyle}>About</li>
+                </Link>
 
-                <Link to='/employee'>
-                    <li>Employee</li>
-                </Link> */}
+                <Link to='/shop'>
+                    <li style={navStyle}>Shop</li>
+                </Link>
 
 
 

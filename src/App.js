@@ -19,7 +19,7 @@ function App() {
         <Nav />
         <Switch>
 
-          <Route path='/' component={Home} exact />
+          <Route path='/' exact component={Home}  />
           <Route path='/department' component={Department} />
           <Route path='/employee' component={Employee} />
           <Route path='/about' component={About} />
