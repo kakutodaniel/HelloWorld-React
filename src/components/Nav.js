@@ -10,6 +10,7 @@ function Nav(props) {
     }
 
     function logout() {
+        sessionStorage.removeItem("logged");
         props.handler()
     }
 

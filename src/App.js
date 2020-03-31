@@ -11,7 +11,7 @@ import Login from './components/Login';
 
 function App() {
 
-  const [isLogged, setLogin] = useState(false);
+  const [isLogged, setLogin] = useState(sessionStorage.getItem("logged") == null ? false : true);
 
   function logged() {
     setLogin(true);

@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom';
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 function Login(props) {
-
+    const errorStyle = {
+        color: 'red'
+    }
 
     const [user, setUser] = useState('user');
     const [pass, setpass] = useState('password');
@@ -16,8 +20,8 @@ function Login(props) {
         setpass(e.target.value);
     }
 
-    function onSubmit(e) {
-        e.preventDefault();
+    function onSubmit() {
+        // e.preventDefault();
 
         setHasError(true);
         // sessionStorage.clear("login");
@@ -31,7 +35,7 @@ function Login(props) {
             setHasError(false);
 
             // sessionStorage.setItem("login", "true");
-
+            sessionStorage.setItem("logged", "1");
             props.handler();
 
             props.history.push("/");
@@ -42,29 +46,71 @@ function Login(props) {
 
     return (
 
-        <div className="Login">
-            <form onSubmit={onSubmit}>
+        <div className="App">
+            <div className="App-header">
+                <div className="Login">
+                    <TextField
+                        variant="standard"
+                        placeholder="Username"
+                        margin="normal"
+                        required
+                        onChange={onChangeUser}
+                        value={user}
+                    />
+                    <TextField
+                        variant="standard"
+                        placeholder="Password"
+                        margin="normal"
+                        required
+                        type="password"
+                        onChange={onChangePass}
+                        value={pass}
+                    />
 
-                <label>User Name</label>
-                <input type="text" value={user} onChange={onChangeUser} />
-
-                <br />
-
-                <label>Password</label>
-                <input type="password" value={pass} onChange={onChangePass} />
-
-                <br />
-
-                <input type="submit" value="Log In" />
-
+                    <div className="Button">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                onSubmit();
+                            }}
+                        >
+                            Log In
+                        </Button>
+                    </div>
+                </div>
                 {
-                    hasError ? (<h4>Invalid user or password!</h4>)
+                    hasError ? (<h4 style={errorStyle}>Invalid user or password!</h4>)
                         : (<div></div>)
                 }
+            </div>
 
 
-            </form>
         </div>
+
+        // <div className="Login">
+        //     <form onSubmit={onSubmit}>
+
+        //         <label>User Name</label>
+        //         <input type="text" value={user} onChange={onChangeUser} />
+
+        //         <br />
+
+        //         <label>Password</label>
+        //         <input type="password" value={pass} onChange={onChangePass} />
+
+        //         <br />
+
+        //         <input type="submit" value="Log In" />
+
+        //         {
+        //             hasError ? (<h4>Invalid user or password!</h4>)
+        //                 : (<div></div>)
+        //         }
+
+
+        //     </form>
+        // </div>
 
     )
 
