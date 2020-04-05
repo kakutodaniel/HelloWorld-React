@@ -59,7 +59,7 @@ function App() {
           )} />
 
 
-          <Route path='*' render={() => (<Redirect to="/" />)} />
+          <Route render={() => (<Redirect to="/" />)} />
 
 
           {/* <Route path='/' exact component={Home} onEnter={auth} />

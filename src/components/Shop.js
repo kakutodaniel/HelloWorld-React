@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
 
@@ -6,10 +6,13 @@ function Shop() {
 
 
     useEffect(() => {
-        fetchItems();
+        setTimeout(() => {
+            fetchItems()
+        }, 500)
 
     }, []);
 
+    const [loading, setLoading] = useState(true);
     const [items_, setItems_] = useState([]);
     const [items, setItems] = useState([]);
     const [txtSearch, setTxtSearch] = useState('');
@@ -22,10 +25,11 @@ function Shop() {
 
         setItems(items.drinks);
         setItems_(items.drinks);
+        setLoading(false);
 
     };
 
-    function onChangeSearch(e) {
+    const onChangeSearch = (e) => {
         const vl = e.target.value;
         setTxtSearch(vl);
 
@@ -39,22 +43,43 @@ function Shop() {
         setItems(filtered);
     }
 
+    const data = items.map(item => (
+        <h1 key={item.idDrink}>
+            <Link to={`/shop/${item.idDrink}`}>{item.strDrink}</Link>
+        </h1>
+    ));
 
     return (
-        <div>
-            <input type="textbox" placeholder="Search" value={txtSearch} onChange={onChangeSearch} />
+        <Fragment>
             {
+                loading ? (
+                    <div>
+                        <h1>Loading...</h1>
+                    </div>
+                )
+                    : (
+                        <div>
+                            <input type="textbox" placeholder="Search" value={txtSearch} onChange={onChangeSearch} />
+                            {data}
+                        </div>
+                        // <input type="textbox" placeholder="Search" value={txtSearch} onChange={onChangeSearch} />
+                        // {data}
+                        //             {
 
-                items.map(item => (
-                    <h1 key={item.idDrink}>
-                        <Link to={`/shop/${item.idDrink}`}>{item.strDrink}</Link>
-                    </h1>
-                ))
+                        //     items.map(item => (
+                        //         <h1 key={item.idDrink}>
+                        //             <Link to={`/shop/${item.idDrink}`}>{item.strDrink}</Link>
+                        //         </h1>
+                        //     ))
+
+                        // }
+
+
+                    )
 
             }
 
-        </div>
-
+        </Fragment>
     )
 
 }

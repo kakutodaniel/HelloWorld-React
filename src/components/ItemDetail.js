@@ -4,9 +4,11 @@ import React, { useState, useEffect, Fragment } from 'react'
 function Item({ match }) {
 
     useEffect(() => {
+        // console.log(match);
+
         setTimeout(() => {
             fetchItem();
-        }, 1000);
+        }, 500);
 
         // fetchItem();
         // console.log(match)
