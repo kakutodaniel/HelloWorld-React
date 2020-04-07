@@ -31,14 +31,6 @@
       "email": "karen@gmail.com",
       "age": 45,
       "companyId": "3"
-    },
-    {
-      "firstName": "Daniel",
-      "lastName": "Kakuto",
-      "email": "daniel@gmail.com",
-      "age": 34,
-      "companyId": "1",
-      "id": "Qp-ZIMa"
     }
   ],
   "companies": [
