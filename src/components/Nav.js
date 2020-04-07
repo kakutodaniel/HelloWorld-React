@@ -36,6 +36,10 @@ function Nav(props) {
                     <li style={navStyle}>Home</li>
                 </Link>
 
+                <Link to='/register'>
+                    <li style={navStyle}>Register</li>
+                </Link>
+
                 <Link to='/about'>
                     <li style={navStyle}>About</li>
                 </Link>

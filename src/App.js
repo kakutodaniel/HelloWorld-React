@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './App.css';
 import Home from './components/Home';
 import Nav from './components/Nav';
@@ -8,6 +11,8 @@ import About from './components/About';
 import Shop from './components/Shop';
 import ItemDetail from './components/ItemDetail';
 import Login from './components/Login';
+import Register from './components/Register';
+
 
 function App() {
 
@@ -49,6 +54,11 @@ function App() {
 
           <Route path='/shop' exact render={() => (
             isLogged ? (<Shop />)
+              : (<Redirect to="/" />)
+          )} />
+
+          <Route path='/register' render={() => (
+            isLogged ? (<Register/>)
               : (<Redirect to="/" />)
           )} />
 
