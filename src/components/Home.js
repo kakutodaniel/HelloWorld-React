@@ -1,29 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
-//import TextField from "@material-ui/core/TextField";
-
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-//import FormGroup from 'react-bootstrap/FormGroup'
-
-
-
+import Table from 'react-bootstrap/Table'
+import Spinner from 'react-bootstrap/Spinner'
 
 const Home = () => {
 
-    const left = { "textAlign": "left" }
-
     useEffect(() => {
 
-        // fetchUsers();
+        setTimeout(() => {
+
+            fetchUsers();
+
+        }, 2000);
 
     }, [])
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const [users, setUsers] = useState([]);
 
@@ -46,50 +39,66 @@ const Home = () => {
     //     setUsers(await data.json());
     // }
 
-    const columnDefs = [{
-        headerName: "First Name", field: "firstName", sortable: true, filter: true
-    }, {
-        headerName: "Last Name", field: "lastName"
-    }, {
-        headerName: "E-mail", field: "email"
-    }, {
-        headerName: "Age", field: "age"
-    }]
-
-
-    // const rowData = [{
-    //     make: "Toyota", model: "Celica", price: 35000
-    // }, {
-    //     make: "Ford", model: "Mondeo", price: 32000
-    // }, {
-    //     make: "Porsche", model: "Boxter", price: 72000
-    // }]
 
     return (
-        <div>
+        <>
 
-            <h1>Home</h1>
+            <h2 style={{ "paddingTop": "20px" }}>Users list</h2>
+            <div style={{
+                padding: "3%",
+                width: "90%"
+            }}>
+                <Table striped bordered hover responsive>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            loading ? (
+                                <tr>
+                                    <td colSpan="6">
 
-        </div>
-        // loading ? (
-        //     <div>
-        //         <h1>Loading...</h1>
-        //     </div>
-        // ) : (
-        //         <div
-        //             className="ag-theme-balham"
-        //             style={{
-        //                 height: '500px',
-        //                 width: '60%'
-        //             }}
-        //         >
-        //             <AgGridReact
-        //                 columnDefs={columnDefs}
-        //                 rowData={users}>
-        //             </AgGridReact>
-        //         </div>
+                                        <Spinner animation="border" variant="info" />
 
-        //     )
+                                    </td>
+                                </tr>
+
+                            ) : (
+                                    users.map((item, idx) => (
+                                        <tr>
+                                            <td>{idx + 1}</td>
+                                            <td>{item.firstName}</td>
+                                            <td>{item.lastName}</td>
+                                            <td>{item.email}</td>
+                                            <td>
+                                                <Button style={{ width: "85%" }} variant="success" type="submit">
+                                                    Edit
+                                            </Button>
+                                            </td>
+                                            <td>
+                                                <Button style={{ width: "50%" }} variant="danger" type="submit">
+                                                    Remove
+                                            </Button>
+                                            </td>
+                                        </tr>
+
+                                    ))
+
+                                )
+                        }
+
+                    </tbody>
+                </Table>
+
+            </div>
+        </>
 
     );
 }
