@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -7,8 +7,7 @@ import { createRef } from 'react';
 
 
 const Register = () => {
-    const left = { "textAlign": "left" }
-
+    
     const initialState = {
         name: "",
         lastName: "",
@@ -35,13 +34,12 @@ const Register = () => {
     const [validated, setValidated] = useState(false)
     const [disabled, setDisabled] = useState(false)
 
-    const [showModal, setShowModal] = useState(false)
-    const handleModalClose = () => {
-        setShowModal(false);
-    }
-
-    const [titleModal, setTitleModal] = useState('')
-    const [bodyModal, setBodyModal] = useState('')
+    const [modalData, setModalData] = useState({
+        showModal: false,
+        onClose: () => { setModalData({ ...modalData, showModal: false }) },
+        title: '',
+        body: ''
+    })
 
     const wrapper = createRef()
 
@@ -74,20 +72,15 @@ const Register = () => {
                     // console.log(data.message)
                 }
 
-                setShowModal(true)
-                setTitleModal('Success')
-                setBodyModal('User successfully registered')
+                setModalData({ ...modalData, showModal: true, title: 'Success', body: 'User successfully registered' })
 
                 clearState();
 
-                // console.log(data);
-                // console.log(response);
             }).catch(error => {
 
                 console.log(error)
-                setShowModal(true)
-                setTitleModal('Error')
-                setBodyModal(error.message)
+
+                setModalData({ ...modalData, showModal: true, title: 'Error', body: error.message })
 
             }).finally(() => {
 
@@ -95,7 +88,6 @@ const Register = () => {
                 setValidated(false);
 
             })
-
     }
 
     const handleSubmit = (e) => {
@@ -126,13 +118,13 @@ const Register = () => {
             <div style={{
                 padding: "3%",
                 display: "flex",
-                "flexDirection": "column",
-                "alignItems": "center",
-                "justifyContent": "center",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
             }}>
                 <Form style={{ "width": "40%" }} noValidate validated={validated} onSubmit={handleSubmit}>
 
-                    <Form.Group controlId="formBasicEmail" style={left}>
+                    <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                         <Form.Label>First Name</Form.Label>
                         <Form.Control type="text" required placeholder="John" minLength="3" value={name} name="name" onChange={onChange} />
                         <Form.Control.Feedback type="invalid">min length is 3</Form.Control.Feedback>
@@ -140,21 +132,21 @@ const Register = () => {
 
                     </Form.Group>
 
-                    <Form.Group controlId="formBasicEmail" style={left}>
+                    <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                         <Form.Label>Last Name</Form.Label>
                         <Form.Control type="text" required placeholder="Stuart" minLength="3" value={lastName} name="lastName" onChange={onChange} />
                         <Form.Control.Feedback type="invalid">min length is 3</Form.Control.Feedback>
                         {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
                     </Form.Group>
 
-                    <Form.Group controlId="formBasicEmail" style={left}>
+                    <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" required placeholder="name@example.com" value={email} name="email" onChange={onChange} />
                         {/* <Form.Control.Feedback>Looks good!</Form.Control.Feedback> */}
                         <Form.Control.Feedback type="invalid">Provide a valid email</Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="formBasicEmail" style={left}>
+                    <Form.Group controlId="formBasicEmail" style={{ textAlign: "left" }}>
                         <Button variant="primary" type="submit" disabled={disabled}>
                             {disabled ? 'Wait ...' : 'Submit'}
                         </Button>
@@ -166,7 +158,9 @@ const Register = () => {
             </div>
 
             <div ref={wrapper}>
-                <CompModal showModal={showModal} onClose={handleModalClose} title={titleModal} body={bodyModal} />
+
+                <CompModal {...modalData} />
+
             </div>
 
         </>

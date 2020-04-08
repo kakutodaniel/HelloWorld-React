@@ -31,6 +31,38 @@
       "email": "karen@gmail.com",
       "age": 45,
       "companyId": "3"
+    },
+    {
+      "firstName": "daniel",
+      "lastName": "kakuto",
+      "email": "kakutodaniel@hotmail.com",
+      "age": 1000,
+      "companyId": 1,
+      "id": "lrju8-g"
+    },
+    {
+      "firstName": "daniel2",
+      "lastName": "kakuto2",
+      "email": "daniel@daniel",
+      "age": 1000,
+      "companyId": 1,
+      "id": "Exhyckz"
+    },
+    {
+      "firstName": "daniel007",
+      "lastName": "kakuto007",
+      "email": "kakutodaniel@hotmail.com",
+      "age": 1000,
+      "companyId": 1,
+      "id": "nYMP8um"
+    },
+    {
+      "firstName": "daniel008",
+      "lastName": "kakuto008",
+      "email": "kakutodaniel@hotmail.com",
+      "age": 1000,
+      "companyId": 1,
+      "id": "eGApRrI"
     }
   ],
   "companies": [

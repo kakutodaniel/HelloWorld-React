@@ -20,7 +20,7 @@ const CompModal = (props) => {
                             </Button>
                 </Modal.Footer>
             </Modal>
-            
+
             {/* {
                 props.showModal ? (
                     <Modal show={true} onHide={props.onClose}>
