@@ -13,7 +13,7 @@ function Item({ match }) {
         // fetchItem();
         // console.log(match)
 
-    }, []);
+    }, [])
 
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({});

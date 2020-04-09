@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
@@ -46,7 +47,7 @@ const Home = () => {
             <h2 style={{ "paddingTop": "20px" }}>Users list</h2>
             <div style={{
                 padding: "3%",
-                width: "90%"
+                // width: "90%"
             }}>
                 <Table striped bordered hover responsive>
                     <thead>
@@ -72,20 +73,22 @@ const Home = () => {
 
                             ) : (
                                     users.map((item, idx) => (
-                                        <tr>
+                                        <tr key={item.id}>
                                             <td>{idx + 1}</td>
                                             <td>{item.firstName}</td>
                                             <td>{item.lastName}</td>
                                             <td>{item.email}</td>
                                             <td>
-                                                <Button style={{ width: "85%" }} variant="success" type="submit">
-                                                    Edit
-                                            </Button>
+                                                <Link to={`/register/${item.id}`}>
+                                                    <Button style={{ width: "85%" }} variant="success">
+                                                        Edit
+                                                    </Button>
+                                                </Link>
                                             </td>
                                             <td>
-                                                <Button style={{ width: "50%" }} variant="danger" type="submit">
+                                                <Button style={{ width: "50%" }} variant="danger">
                                                     Remove
-                                            </Button>
+                                                </Button>
                                             </td>
                                         </tr>
 

@@ -57,17 +57,20 @@ function App() {
               : (<Redirect to="/" />)
           )} />
 
-          <Route path='/register' render={() => (
-            isLogged ? (<Register/>)
-              : (<Redirect to="/" />)
-          )} />
-
-
           <Route path='/shop/:id' render={({ match }) => (
             isLogged ? (<ItemDetail match={match} />)
               : (<Redirect to="/" />)
           )} />
 
+          {/* <Route path='/register' exact render={() => (
+            isLogged ? (<Register />)
+              : (<Redirect to="/" />)
+          )} /> */}
+
+          <Route path='/register/:id?' render={({ match }) => (
+            isLogged ? (<Register match={match} />)
+              : (<Redirect to="/" />)
+          )} />
 
           <Route render={() => (<Redirect to="/" />)} />
 
