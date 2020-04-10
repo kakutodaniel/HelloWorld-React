@@ -4,6 +4,17 @@ import React, { useState, useEffect, Fragment } from 'react'
 function Item({ match }) {
 
     useEffect(() => {
+
+        const fetchItem = async () => {
+            const data = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${match.params.id}`);
+            const item = await data.json();
+    
+            console.log(item);
+    
+            setItem(item.drinks[0]);
+            setLoading(false);
+    
+        };
         // console.log(match);
 
         setTimeout(() => {
@@ -13,22 +24,12 @@ function Item({ match }) {
         // fetchItem();
         // console.log(match)
 
-    }, [])
+    }, [match])
 
     const [loading, setLoading] = useState(true);
     const [item, setItem] = useState({});
 
-    const fetchItem = async () => {
-        const data = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${match.params.id}`);
-        const item = await data.json();
-
-        console.log(item);
-
-        setItem(item.drinks[0]);
-        setLoading(false);
-
-    };
-
+ 
     return (
         <Fragment>
             {

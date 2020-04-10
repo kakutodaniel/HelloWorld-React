@@ -86,7 +86,7 @@ const Home = () => {
                                                 </Link>
                                             </td>
                                             <td>
-                                                <Button style={{ width: "50%" }} variant="danger">
+                                                <Button style={{ width: "60%" }} variant="danger">
                                                     Remove
                                                 </Button>
                                             </td>

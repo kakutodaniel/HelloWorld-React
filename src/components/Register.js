@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -7,50 +8,47 @@ import Spinner from 'react-bootstrap/Spinner'
 import { createRef } from 'react';
 
 
-const Register = ({ match }) => {
+const Register = (props) => {
 
     useEffect(() => {
 
-        
-        if (match && match.params.id) {
+        setDisabled(false)
+
+        if (props.match && props.match.params.id) {
+
+            setDisabled(true)
+            setTitle('Update a user')
+            setId(props.match.params.id)
+
+            const setUser = async () => {
+                await fetch(`${api_base_url}/users/${props.match.params.id}`).then(async (response) => {
+
+                    const data = await response.json();
+                    setState(state => ({ ...state, ...data }));
+                    setDisabled(false)
+
+                })
+                    .catch((e) => {
+                        console.log(e);
+                    })
+            }
 
             setTimeout(() => {
 
-                updateUser();
+                setUser()
 
             }, 2000);
 
         }
         else {
 
-            newUser();
-
+            setTitle('Register a new user')
+            setState({ firstName: '', lastName: '', email: '' })
         }
 
-    }, [match])
+    }, [props])
 
-    const newUser = () => {
-        clearState();
-        setTitle('Register a new user');
-    }
-
-    const updateUser = () => {
-        setTitle('Update a user');
-        setUser();
-    }
-
-    const setUser = async () => {
-        await fetch(`http://localhost:3000/users/${match.params.id}`).then(async (response) => {
-
-            const data = await response.json();
-            setState({ ...data });
-            // console.log(data);
-
-        })
-            .catch((e) => {
-                console.log(e);
-            })
-    }
+    const api_base_url = 'http://localhost:3000';
 
     const initialState = {
         firstName: "",
@@ -60,10 +58,10 @@ const Register = ({ match }) => {
 
     const [{ firstName, lastName, email }, setState] = useState(initialState);
 
-    const clearState = () => {
-
-        setState({ ...initialState });
-    };
+    // const clearState = () => {
+    //     //setState(state => ({ ...state, ...initialState }))
+    //     setState({ ...initialState });
+    // };
 
     const onChange = e => {
 
@@ -76,13 +74,16 @@ const Register = ({ match }) => {
     // const [lastName, setLastName] = useState("")
     // const [email, setEmail] = useState("")
 
-    const [title, setTitle] = useState('');
+    const [id, setId] = useState('')
+    const [title, setTitle] = useState('')
     const [validated, setValidated] = useState(false)
     const [disabled, setDisabled] = useState(false)
 
     const [modalData, setModalData] = useState({
         showModal: false,
-        onClose: () => { setModalData({ ...modalData, showModal: false }) },
+        // onClose: () => { setModalData({ ...modalData, showModal: false }) },
+        //onClose: () => { hasError ? setModalData({ ...modalData, showModal: false }) : props.history.push('/') },
+        onClose: null,
         title: '',
         body: ''
     })
@@ -90,7 +91,7 @@ const Register = ({ match }) => {
     const wrapper = createRef()
 
     const requestOptions = {
-        method: 'POST',
+        method: id !== '' ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             firstName,
@@ -101,9 +102,15 @@ const Register = ({ match }) => {
         })
     };
 
-    const postData = async () => {
+    const saveData = async () => {
 
-        await fetch('http://localhost:3000/users', requestOptions)
+        let url = `${api_base_url}/users`;
+
+        if (id !== '') {
+            url += `/${id}`
+        }
+
+        await fetch(url, requestOptions)
             .then(async response => {
 
                 const data = await response.json();
@@ -118,15 +125,16 @@ const Register = ({ match }) => {
                     // console.log(data.message)
                 }
 
-                setModalData({ ...modalData, showModal: true, title: 'Success', body: 'User successfully registered' })
+                const bodyMessage = id !== '' ? 'User successfully updated' : 'User successfully registered';
+                // setModalData({ ...modalData, showModal: true, title: 'Success', body: bodyMessage })
+                setModalData({ showModal: true, title: 'Success', body: bodyMessage, onClose: () => { props.history.push('/') } })
 
-                clearState();
+                // clearState();
 
             }).catch(error => {
 
-                console.log(error)
+                setModalData({ showModal: true, title: 'Error', body: error.message, onClose: () => { setModalData({ showModal: false }) } })
 
-                setModalData({ ...modalData, showModal: true, title: 'Error', body: error.message })
 
             }).finally(() => {
 
@@ -154,7 +162,7 @@ const Register = ({ match }) => {
             return;
         }
 
-        postData();
+        saveData();
 
     }
 
@@ -224,4 +232,4 @@ const Register = ({ match }) => {
 }
 
 
-export default Register;
+export default withRouter(Register);
