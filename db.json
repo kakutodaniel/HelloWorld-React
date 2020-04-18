@@ -1,9 +1,9 @@
 {
   "users": [
     {
-      "firstName": "John22",
-      "lastName": "Travolta2",
-      "email": "evelyntynan1963@gmail.com",
+      "firstName": "John",
+      "lastName": "Travolta",
+      "email": "john.travolta@gmail.com",
       "age": 1000,
       "companyId": 1,
       "id": "1"
@@ -41,8 +41,8 @@
       "id": "lrju8-g"
     },
     {
-      "firstName": "daniel2",
-      "lastName": "kakuto2",
+      "firstName": "daniel@",
+      "lastName": "kakuto@",
       "email": "daniel@daniel",
       "age": 1000,
       "companyId": 1,

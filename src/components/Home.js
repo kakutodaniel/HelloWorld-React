@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 import Spinner from 'react-bootstrap/Spinner'
+import Dialog from './Dialog';
+
 
 const Home = () => {
 
@@ -17,17 +19,42 @@ const Home = () => {
 
     }, [])
 
+    const [modalData, setModalData] = useState({
+        showModal: false,
+        onClose: null,
+        onAction: null,
+        title: '',
+        body: ''
+    })
+
+
     const [loading, setLoading] = useState(true);
 
     const [users, setUsers] = useState([]);
 
     const fetchUsers = async () => {
         await fetch("http://localhost:3000/users").then(async (response) => {
+
             setUsers(await response.json())
-            setLoading(false)
+            // setLoading(false)
         })
             .catch((e) => {
+
+                setModalData({
+
+                    showModal: true,
+                    title: 'Error',
+                    body: `${e.message}. Please check out if Json-Server is running.`,
+                    onClose: () => setModalData({ showModal: false }),
+                    // onAction: () => { setModalData({ showModal: false }) }
+                })
+
                 console.log(e);
+            })
+            .finally(() => {
+
+                setLoading(false)
+
             })
         // .then(async (r) => {
         //     console.log(await r.json());
@@ -40,6 +67,19 @@ const Home = () => {
     //     setUsers(await data.json());
     // }
 
+    const removeHandle = (id) => {
+
+        setModalData({
+
+            showModal: true,
+            title: 'Delete',
+            body: `Do you want to delete the record '${id}' ?`,
+            onClose: () => setModalData({ showModal: false }),
+            onAction: () => setModalData({ showModal: false })
+
+        })
+
+    }
 
     return (
         <>
@@ -86,7 +126,7 @@ const Home = () => {
                                                 </Link>
                                             </td>
                                             <td>
-                                                <Button style={{ width: "60%" }} variant="danger">
+                                                <Button style={{ width: "60%" }} variant="danger" onClick={() => removeHandle(item.id)}>
                                                     Remove
                                                 </Button>
                                             </td>
@@ -101,6 +141,8 @@ const Home = () => {
                 </Table>
 
             </div>
+
+            <Dialog {...modalData} />
         </>
 
     );

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import CompModal from './CompModal';
+import Dialog from './Dialog';
 import Spinner from 'react-bootstrap/Spinner'
 import { createRef } from 'react';
 
@@ -127,13 +127,27 @@ const Register = (props) => {
 
                 const bodyMessage = id !== '' ? 'User successfully updated' : 'User successfully registered';
                 // setModalData({ ...modalData, showModal: true, title: 'Success', body: bodyMessage })
-                setModalData({ showModal: true, title: 'Success', body: bodyMessage, onClose: () => { props.history.push('/') } })
+                setModalData({
+
+                    showModal: true,
+                    title: 'Success',
+                    body: bodyMessage,
+                    onClose: () => props.history.push('/')
+
+                })
 
                 // clearState();
 
             }).catch(error => {
 
-                setModalData({ showModal: true, title: 'Error', body: error.message, onClose: () => { setModalData({ showModal: false }) } })
+                setModalData({
+
+                    showModal: true,
+                    title: 'Error',
+                    body: error.message,
+                    onClose: () => setModalData({ showModal: false })
+
+                })
 
 
             }).finally(() => {
@@ -222,7 +236,7 @@ const Register = (props) => {
 
             <div ref={wrapper}>
 
-                <CompModal {...modalData} />
+                <Dialog {...modalData} />
 
             </div>
 
