@@ -6,6 +6,8 @@ import Table from 'react-bootstrap/Table'
 import Spinner from 'react-bootstrap/Spinner'
 import Dialog from './Dialog';
 
+import { getUsers, deleteById } from '../services/userService.js'
+
 
 const Home = () => {
 
@@ -34,35 +36,55 @@ const Home = () => {
 
     const [requesting, setRequesting] = useState(false)
 
+    // const fetchUsers = userService.get();
+
     const fetchUsers = async () => {
-        await fetch("http://localhost:3000/users").then(async (response) => {
 
-            setUsers(await response.json())
-            // setLoading(false)
-        })
-            .catch((e) => {
+        const result = await getUsers();
 
-                setModalData({
+        if (result.ok) {
 
-                    showModal: true,
-                    title: 'Error',
-                    body: `${e.message}. Please check out if Json-Server is running.`,
-                    onClose: () => setModalData({ showModal: false }),
-                    // onAction: () => { setModalData({ showModal: false }) }
-                })
+            setUsers(await result.json())
 
-                console.log(e);
-            })
-            .finally(() => {
+        }
+        else {
 
-                setLoading(false)
+            ShowModal(true, 'Error', `${result}. Please check out if Json-Server is running.`,
+                () => setModalData({ showModal: false }), null);
+        }
 
-            })
-        // .then(async (r) => {
-        //     console.log(await r.json());
-        // })
-        //setUsers(await data.json());
+        setLoading(false)
+
     }
+    // {
+    //     await fetch("http://localhost:3000/users").then(async (response) => {
+
+    //         setUsers(await response.json())
+    //         // setLoading(false)
+    //     })
+    //         .catch((e) => {
+
+    //             setModalData({
+
+    //                 showModal: true,
+    //                 title: 'Error',
+    //                 body: `${e.message}. Please check out if Json-Server is running.`,
+    //                 onClose: () => setModalData({ showModal: false }),
+    //                 // onAction: () => { setModalData({ showModal: false }) }
+    //             })
+
+    //             console.log(e);
+    //         })
+    //         .finally(() => {
+
+    //             setLoading(false)
+
+    //         })
+    //     // .then(async (r) => {
+    //     //     console.log(await r.json());
+    //     // })
+    //     //setUsers(await data.json());
+    // }
 
     // const fetchUsers = async () => {
     //     const data = await fetch("http://localhost:3000/users");
@@ -71,13 +93,9 @@ const Home = () => {
 
     const removeHandle = (id, firstName, lastName) => {
 
-        setModalData({
-
-            showModal: true,
-            title: 'Delete',
-            body: `Are you sure you want to delete '${firstName} ${lastName}' ?`,
-            onClose: () => setModalData({ showModal: false }),
-            onAction: () => {
+        ShowModal(true, 'Delete', `Are you sure you want to delete '${firstName} ${lastName}' ?`,
+            () => setModalData({ showModal: false }),
+            () => {
 
                 setRequesting(true);
 
@@ -86,67 +104,106 @@ const Home = () => {
                     deleteUser(id)
 
                 }, 2000);
-            }
+            });
 
-        })
     }
 
     const deleteUser = async (id) => {
 
-        await fetch(`http://localhost:3000/users/${id}`,
-            {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
+        const result = await deleteById(id);
 
-            }).then(async (response) => {
+        if (result.ok) {
 
-                const data = await response.json();
+            ShowModal(true, 'Success', 'User successfully deleted', () => window.location.reload(), null)
 
-                if (!response.ok) {
+        }
+        else {
 
-                    const error = (data && data.message) || response.status
+            let msg = result;
 
-                    return Promise.reject(error);
+            if (result.status && result.status === 404) {
+                msg = 'User not found!'
+            }
 
-                    // console.log(data.message)
-                }
+            ShowModal(true, 'Error', msg, () => setModalData({ showModal: false }), null)
 
-                setModalData({
+        }
 
-                    showModal: true,
-                    title: 'Success',
-                    body: 'User successfully deleted',
-                    onClose: () => window.location.reload(), // setModalData({ showModal: false }),
-                    onAction: null
-
-                })
-
-                // window.location.reload();
-
-            })
-            .catch((e) => {
-
-                const msg = e === 404
-                    ? 'User not found!'
-                    : typeof (e) === 'object'
-                        ? `${e.message}. Please check out if Json-Server is running.`
-                        : e
-
-                setModalData({
-
-                    showModal: true,
-                    title: 'Error',
-                    body: msg,
-                    onClose: () => setModalData({ showModal: false }),
-                    onAction: null
-
-                })
-
-                // console.log(e);
-                // console.log('catch');
-
-            })
+        setRequesting(false);
     }
+
+    const ShowModal = (show, title, body, onClose, onAction) => {
+
+        setModalData({
+
+            showModal: show,
+            title: title,
+            body: body,
+            onClose: onClose,
+            onAction: onAction
+
+        })
+
+    }
+
+    // const deleteUser = async (id) => {
+
+
+
+    //     await fetch(`http://localhost:3000/users/${id}`,
+    //         {
+    //             method: 'DELETE',
+    //             headers: { 'Content-Type': 'application/json' }
+
+    //         }).then(async (response) => {
+
+    //             const data = await response.json();
+
+    //             if (!response.ok) {
+
+    //                 const error = (data && data.message) || response.status
+
+    //                 return Promise.reject(error);
+
+    //                 // console.log(data.message)
+    //             }
+
+    //             setModalData({
+
+    //                 showModal: true,
+    //                 title: 'Success',
+    //                 body: 'User successfully deleted',
+    //                 onClose: () => window.location.reload(), // setModalData({ showModal: false }),
+    //                 onAction: null
+
+    //             })
+
+    //             // window.location.reload();
+
+    //         })
+    //         .catch((e) => {
+
+    //             const msg = e === 404
+    //                 ? 'User not found!'
+    //                 : typeof (e) === 'object'
+    //                     ? `${e.message}. Please check out if Json-Server is running.`
+    //                     : e
+
+    //             setModalData({
+
+    //                 showModal: true,
+    //                 title: 'Error',
+    //                 body: msg,
+    //                 onClose: () => setModalData({ showModal: false }),
+    //                 onAction: null
+
+    //             })
+
+    //             // console.log(e);
+    //             // console.log('catch');
+
+    //         })
+    // }
 
     return (
         <>
