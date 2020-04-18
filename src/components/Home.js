@@ -20,6 +20,7 @@ const Home = () => {
     }, [])
 
     const [modalData, setModalData] = useState({
+
         showModal: false,
         onClose: null,
         onAction: null,
@@ -27,10 +28,11 @@ const Home = () => {
         body: ''
     })
 
-
     const [loading, setLoading] = useState(true);
 
     const [users, setUsers] = useState([]);
+
+    const [requesting, setRequesting] = useState(false)
 
     const fetchUsers = async () => {
         await fetch("http://localhost:3000/users").then(async (response) => {
@@ -67,18 +69,83 @@ const Home = () => {
     //     setUsers(await data.json());
     // }
 
-    const removeHandle = (id) => {
+    const removeHandle = (id, firstName, lastName) => {
 
         setModalData({
 
             showModal: true,
             title: 'Delete',
-            body: `Do you want to delete the record '${id}' ?`,
+            body: `Are you sure you want to delete '${firstName} ${lastName}' ?`,
             onClose: () => setModalData({ showModal: false }),
-            onAction: () => setModalData({ showModal: false })
+            onAction: () => {
+
+                setRequesting(true);
+
+                setTimeout(() => {
+
+                    deleteUser(id)
+
+                }, 2000);
+            }
 
         })
+    }
 
+    const deleteUser = async (id) => {
+
+        await fetch(`http://localhost:3000/users/${id}`,
+            {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+
+            }).then(async (response) => {
+
+                const data = await response.json();
+
+                if (!response.ok) {
+
+                    const error = (data && data.message) || response.status
+
+                    return Promise.reject(error);
+
+                    // console.log(data.message)
+                }
+
+                setModalData({
+
+                    showModal: true,
+                    title: 'Success',
+                    body: 'User successfully deleted',
+                    onClose: () => window.location.reload(), // setModalData({ showModal: false }),
+                    onAction: null
+
+                })
+
+                // window.location.reload();
+
+            })
+            .catch((e) => {
+
+                const msg = e === 404
+                    ? 'User not found!'
+                    : typeof (e) === 'object'
+                        ? `${e.message}. Please check out if Json-Server is running.`
+                        : e
+
+                setModalData({
+
+                    showModal: true,
+                    title: 'Error',
+                    body: msg,
+                    onClose: () => setModalData({ showModal: false }),
+                    onAction: null
+
+                })
+
+                // console.log(e);
+                // console.log('catch');
+
+            })
     }
 
     return (
@@ -126,7 +193,7 @@ const Home = () => {
                                                 </Link>
                                             </td>
                                             <td>
-                                                <Button style={{ width: "60%" }} variant="danger" onClick={() => removeHandle(item.id)}>
+                                                <Button style={{ width: "60%" }} variant="danger" onClick={() => removeHandle(item.id, item.firstName, item.lastName)}>
                                                     Remove
                                                 </Button>
                                             </td>
@@ -142,7 +209,7 @@ const Home = () => {
 
             </div>
 
-            <Dialog {...modalData} />
+            <Dialog {...modalData} requesting={requesting} />
         </>
 
     );

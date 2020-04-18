@@ -2,6 +2,7 @@ import React from 'react'
 
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import Spinner from 'react-bootstrap/Spinner'
 
 const Dialog = (props) => {
 
@@ -17,28 +18,35 @@ const Dialog = (props) => {
 
                 <Modal.Footer>
 
-                    { 
+                    {
                         props.onAction ? (
-                            <>
-                                <Button variant="success" onClick={props.onAction}>Yes</Button>
-                                <Button variant="danger" onClick={props.onClose}>No</Button>
-                            </>
+                            props.requesting ? (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                </>
+
+                            ) : (
+                                    <>
+                                        <Button variant="success" onClick={props.onAction}>Yes</Button>
+                                        <Button variant="danger" onClick={props.onClose}>No</Button>
+                                    </>
+                                )
                         ) : (
-
-                            <Button variant="secondary" onClick={props.onClose}>Close</Button>
-                        )
-
+                                <Button variant="secondary" onClick={props.onClose}>Close</Button>
+                            )
                     }
 
                 </Modal.Footer>
-            </Modal>
-
+            </Modal >
 
         </>
-
     )
-
-
 
 }
 
